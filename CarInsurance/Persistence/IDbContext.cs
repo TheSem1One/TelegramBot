@@ -3,7 +3,7 @@ using MongoDB.Driver;
 
 namespace CarInsurance.Persistence
 {
-    public interface DbContext
+    public interface IDbContext
     {
         IMongoCollection<User> Users { get; set; }
     }

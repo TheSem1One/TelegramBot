@@ -2,7 +2,7 @@
 
 namespace CarInsurance.Helper
 {
-    public class IsEmpty
+    public class MissingDocumentsInspector
     {
         public bool IsPassportEmpty(Passport passport)
         {

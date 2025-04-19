@@ -9,11 +9,11 @@ using static MongoDB.Driver.Builders<CarInsurance.Entities.User>;
 namespace CarInsurance.Services
 {
     public class InsuranceBotService(IImageProcessingRepository imageProcessingService,
-       DbContext context, IsEmpty empty, ITelegramBotClient client) : IInsuranceBotService
+       IDbContext context, MissingDocumentsInspector empty, ITelegramBotClient client) : IInsuranceBotService
     {
-        private readonly IsEmpty _empty = empty;
+        private readonly MissingDocumentsInspector _empty = empty;
         private readonly IImageProcessingRepository _imageProcessingService = imageProcessingService;
-        private readonly DbContext _context = context;
+        private readonly IDbContext _context = context;
 
         public async Task HandleUserMessageAsync(UserMessageDto message, IBotClient botClient, CancellationToken ct)
         {

@@ -13,11 +13,11 @@ using MongoDB.Driver;
 
 namespace CarInsurance.Services
 {
-    public class MindeeService(DbContext context, IOptions<ConnectionOptions> options,
+    public class MindeeService(IDbContext context, IOptions<ConnectionOptions> options,
      MapToTechPassport map) : IImageProcessingRepository
     {
         private readonly MapToTechPassport _map = map;
-        private readonly DbContext _context = context;
+        private readonly IDbContext _context = context;
         private readonly MindeeClient _mindeeClient = new MindeeClient(options.Value.MindeeAPI);
 
         public async Task<string> ProcessIdCardAsync(LocalInputSource image, CancellationToken ct, long userId)

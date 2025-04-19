@@ -5,7 +5,7 @@ using MongoDB.Driver;
 
 namespace CarInsurance.Persistence
 {
-    public class UserContext : DbContext
+    public class UserContext : IDbContext
     {
         public IMongoCollection<User> Users { get; set; }
 

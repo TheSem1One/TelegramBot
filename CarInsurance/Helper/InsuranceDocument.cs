@@ -5,11 +5,11 @@ using QuestPDF.Infrastructure;
 
 public class InsuranceDocument : IDocument
 {
-    private readonly User _data;
+    private readonly User _user;
 
-    public InsuranceDocument(User data)
+    public InsuranceDocument(User user)
     {
-        _data = data;
+        _user = user;
     }
 
     public DocumentMetadata GetMetadata() => DocumentMetadata.Default;
@@ -32,11 +32,11 @@ public class InsuranceDocument : IDocument
                 column.Item().Text("СТРАХОВИЙ ПОЛІС").FontSize(18).Bold().Underline().AlignCenter();
 
                 column.Item().Text($"Номер поліса: {rand.Next(11111111,999999999)}");
-                column.Item().Text($"Ім’я страхувальника:{_data.Passport.Surname} {_data.Passport.Name} ");
-                column.Item().Text($"Паспорт: {_data.Passport.DocumentNumber}");
+                column.Item().Text($"Ім’я страхувальника:{_user.Passport.Surname} {_user.Passport.Name} ");
+                column.Item().Text($"Паспорт: {_user.Passport.DocumentNumber}");
 
-                column.Item().Text($"Марка авто: {_data.TechnicalPassports.Mark} {_data.TechnicalPassports.Type}");
-                column.Item().Text($"VIN: {_data.TechnicalPassports.VehicleIdentificationNumber}");
+                column.Item().Text($"Марка авто: {_user.TechnicalPassports.Mark} {_user.TechnicalPassports.Type}");
+                column.Item().Text($"VIN: {_user.TechnicalPassports.VehicleIdentificationNumber}");
 
                 column.Item().Text($"Період дії: {DateTime.Today} – {DateTime.Today.AddYears(3)}");
                 column.Item().Text($"Сума покриття: {600} грн");
