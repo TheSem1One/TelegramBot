@@ -126,14 +126,14 @@ namespace TelegramBot.Infrastructure.Services
                 .Users
                 .Find(user => user.Id == message.UserId)
                 .FirstOrDefaultAsync();
-            if (!_empty.IsPassportEmpty( user.Passport))
+            if (_empty.IsPassportEmpty( user.Passport))
             {
                 await botClient.SendMessageAsync(
                     message.ChatId,
                     "Будь ласка, надішліть Технічний паспорт для обробки.",
                     ct);
             }
-            else if (!_empty.IsTechPassportEmpty(user.TechnicalPassports))
+            else if (_empty.IsTechPassportEmpty(user.TechnicalPassports))
             {
                 await botClient.SendMessageAsync(
                     message.ChatId,

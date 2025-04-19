@@ -13,6 +13,12 @@ class Program
     static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        // додаємо appsettings.{Environment}.json
+        builder.Configuration
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+            .AddEnvironmentVariables();
 
         builder.Services.Configure<ConnectionOptions>(
             builder.Configuration.GetSection(ConnectionOptions.SectionName));
