@@ -15,7 +15,7 @@ namespace CarInsurance.Services
     public class TelegramBotClientAdapter(IOptions<ConnectionOptions> options,
     IInsuranceBotService botService) : IBotClient, IHostedService
     {
-        private readonly TelegramBotClient _botClient = new TelegramBotClient(options.Value.TelegramAPI);
+        private readonly TelegramBotClient _botClient = new (options.Value.TelegramAPI);
         private readonly IInsuranceBotService _botService = botService;
 
         public ITelegramBotClient Client => throw new NotImplementedException();

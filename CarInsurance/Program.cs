@@ -6,8 +6,6 @@ using CarInsurance.Services;
 using Microsoft.Extensions.Options;
 using QuestPDF.Infrastructure;
 using Telegram.Bot;
-
-
 class Program
 {
     static async Task Main(string[] args)

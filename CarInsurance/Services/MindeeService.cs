@@ -18,7 +18,7 @@ namespace CarInsurance.Services
     {
         private readonly MapToTechPassport _map = map;
         private readonly IDbContext _context = context;
-        private readonly MindeeClient _mindeeClient = new MindeeClient(options.Value.MindeeAPI);
+        private readonly MindeeClient _mindeeClient = new (options.Value.MindeeAPI);
 
         public async Task<string> ProcessIdCardAsync(LocalInputSource image, CancellationToken ct, long userId)
         {

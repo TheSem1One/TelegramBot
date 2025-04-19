@@ -3,20 +3,17 @@ using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 
-public class InsuranceDocument : IDocument
+public class InsuranceDocument(User user) : IDocument
 {
-    private readonly User _user;
-
-    public InsuranceDocument(User user)
-    {
-        _user = user;
-    }
-
+    private readonly User _user = user;
+    private const int InsuranceCost = 4200;
+    private const int CoverageAmount = 600;
     public DocumentMetadata GetMetadata() => DocumentMetadata.Default;
 
     public void Compose(IDocumentContainer container)
     {
-        Random rand = new Random();
+        Random rand = new();
+        var numberOfPolice = rand.Next(11111111, 999999999);
         container.Page(page =>
         {
             page.Margin(40);
@@ -31,7 +28,7 @@ public class InsuranceDocument : IDocument
 
                 column.Item().Text("СТРАХОВИЙ ПОЛІС").FontSize(18).Bold().Underline().AlignCenter();
 
-                column.Item().Text($"Номер поліса: {rand.Next(11111111,999999999)}");
+                column.Item().Text($"Номер поліса: {numberOfPolice}");
                 column.Item().Text($"Ім’я страхувальника:{_user.Passport.Surname} {_user.Passport.Name} ");
                 column.Item().Text($"Паспорт: {_user.Passport.DocumentNumber}");
 
@@ -39,8 +36,8 @@ public class InsuranceDocument : IDocument
                 column.Item().Text($"VIN: {_user.TechnicalPassports.VehicleIdentificationNumber}");
 
                 column.Item().Text($"Період дії: {DateTime.Today} – {DateTime.Today.AddYears(3)}");
-                column.Item().Text($"Сума покриття: {600} грн");
-                column.Item().Text($"Вартість поліса: {4200} грн");
+                column.Item().Text($"Сума покриття: {CoverageAmount} грн");
+                column.Item().Text($"Вартість поліса: {InsuranceCost} грн");
 
                 column.Item().PaddingTop(20).Text("Підпис страхувальника: ________________________");
 
