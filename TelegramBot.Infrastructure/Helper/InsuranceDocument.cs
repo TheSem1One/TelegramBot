@@ -1,0 +1,54 @@
+﻿using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
+using TelegramBot.Domain.Entity;
+
+public class InsuranceDocument : IDocument
+{
+    private readonly User _data;
+
+    public InsuranceDocument(User data)
+    {
+        _data = data;
+    }
+
+    public DocumentMetadata GetMetadata() => DocumentMetadata.Default;
+
+    public void Compose(IDocumentContainer container)
+    {
+        Random rand = new Random();
+        container.Page(page =>
+        {
+            page.Margin(40);
+            page.Size(PageSizes.A4);
+
+            page.Header().Text("ТОВ Живи на здоров'я")
+                .FontSize(20).Bold().AlignCenter().ParagraphSpacing(10);
+
+            page.Content().Column(column =>
+            {
+                column.Spacing(10);
+
+                column.Item().Text("СТРАХОВИЙ ПОЛІС").FontSize(18).Bold().Underline().AlignCenter();
+
+                column.Item().Text($"Номер поліса: {rand.Next(11111111,999999999)}");
+                column.Item().Text($"Ім’я страхувальника:{_data.Passport.Surname} {_data.Passport.Name} ");
+                column.Item().Text($"Паспорт: {_data.Passport.DocumentNumber}");
+
+                column.Item().Text($"Марка авто: {_data.TechnicalPassports.Mark} {_data.TechnicalPassports.Type}");
+                column.Item().Text($"VIN: {_data.TechnicalPassports.VehicleIdentificationNumber}");
+
+                column.Item().Text($"Період дії: {DateTime.Today} – {DateTime.Today.AddYears(3)}");
+                column.Item().Text($"Сума покриття: {600} грн");
+                column.Item().Text($"Вартість поліса: {4200} грн");
+
+                column.Item().PaddingTop(20).Text("Підпис страхувальника: ________________________");
+
+                column.Item().PaddingTop(40).Text("Цей поліс підтверджує укладення договору страхування відповідно до чинного законодавства України.")
+                    .FontSize(10).Italic();
+            });
+
+            page.Footer().AlignCenter().Text($"Дата створення поліса: {DateTime.Now:dd.MM.yyyy}");
+        });
+    }
+}

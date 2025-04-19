@@ -1,0 +1,40 @@
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using QuestPDF.Infrastructure;
+using Telegram.Bot;
+using TelegramBot.Domain.Options;
+using TelegramBot.Domain.Repositories;
+using TelegramBot.Infrastructure.Data;
+using TelegramBot.Infrastructure.Helper;
+using TelegramBot.Infrastructure.Persistence;
+using TelegramBot.Infrastructure.Services;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+
+        builder.Services.Configure<ConnectionOptions>(
+            builder.Configuration.GetSection(ConnectionOptions.SectionName));
+
+        builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection(nameof(MongoDbSettings)));
+        builder.Services.AddSingleton<DbContext, UserContext>();
+        builder.Services.AddSingleton<IImageProcessingRepository, MindeeService>();
+        builder.Services.AddSingleton<IInsuranceBotService, InsuranceBotService>();
+        builder.Services.AddHostedService<TelegramBotClientAdapter>();
+        builder.Services.AddSingleton<MapToTechPassport>();
+        builder.Services.AddSingleton<IsEmpty>();
+        builder.Services.AddSingleton<ITelegramBotClient>(provider =>
+        {
+            var options = provider.GetRequiredService<IOptions<ConnectionOptions>>().Value;
+            return new TelegramBotClient(options.TelegramAPI);
+        });
+        QuestPDF.Settings.License = LicenseType.Community;
+
+
+        var app = builder.Build();
+
+        await app.RunAsync();
+    }
+}
