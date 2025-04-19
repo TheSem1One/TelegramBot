@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using QuestPDF.Infrastructure;
 using Telegram.Bot;
 using TelegramBot.Domain.Options;
