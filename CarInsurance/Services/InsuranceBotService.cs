@@ -1,20 +1,15 @@
-﻿using MongoDB.Driver;
-using QuestPDF.Fluent;
+﻿using CarInsurance.Entities.Dto;
+using CarInsurance.Entities;
+using CarInsurance.Helper;
+using CarInsurance.Persistence;
+using CarInsurance.Repositories;
+using MongoDB.Driver;
 using Telegram.Bot;
-using Telegram.Bot.Types;
-using TelegramBot.Domain.Entity;
-using TelegramBot.Domain.Entity.Dto;
-using TelegramBot.Domain.Repositories;
-using TelegramBot.Infrastructure.Helper;
-using TelegramBot.Infrastructure.Persistence;
-using static MongoDB.Driver.Builders<TelegramBot.Domain.Entity.User>;
-using User = TelegramBot.Domain.Entity.User;
-
-
-namespace TelegramBot.Infrastructure.Services
+using static MongoDB.Driver.Builders<CarInsurance.Entities.User>;
+namespace CarInsurance.Services
 {
-    public class InsuranceBotService(IImageProcessingRepository imageProcessingService, 
-        DbContext context,IsEmpty empty,ITelegramBotClient client) : IInsuranceBotService
+    public class InsuranceBotService(IImageProcessingRepository imageProcessingService,
+       DbContext context, IsEmpty empty, ITelegramBotClient client) : IInsuranceBotService
     {
         private readonly IsEmpty _empty = empty;
         private readonly IImageProcessingRepository _imageProcessingService = imageProcessingService;
@@ -61,7 +56,7 @@ namespace TelegramBot.Infrastructure.Services
             }
             else if (message.Text?.StartsWith("/buyinsurance") == true)
             {
-                await SendInsurancePdfAsync(client,botClient, message );
+                await SendInsurancePdfAsync(client, botClient, message);
             }
             else
             {
@@ -69,13 +64,13 @@ namespace TelegramBot.Infrastructure.Services
             }
         }
 
-        public async Task SendInsurancePdfAsync(ITelegramBotClient client ,IBotClient botClient, UserMessageDto message)
+        public async Task SendInsurancePdfAsync(ITelegramBotClient client, IBotClient botClient, UserMessageDto message)
         {
             var user = await _context
                 .Users
                 .Find(user => user.Id == message.UserId)
                 .FirstOrDefaultAsync();
-            await botClient.SendDocumentAsync(client, message,user);
+            await botClient.SendDocumentAsync(client, message, user);
         }
         private async Task ProcessPhotoPassportAsync(UserMessageDto message, IBotClient botClient, CancellationToken ct)
         {
@@ -126,7 +121,7 @@ namespace TelegramBot.Infrastructure.Services
                 .Users
                 .Find(user => user.Id == message.UserId)
                 .FirstOrDefaultAsync();
-            if (_empty.IsPassportEmpty( user.Passport))
+            if (_empty.IsPassportEmpty(user.Passport))
             {
                 await botClient.SendMessageAsync(
                     message.ChatId,
@@ -142,10 +137,10 @@ namespace TelegramBot.Infrastructure.Services
             }
             else
             {
-               await botClient.SendMessageAsync(
-                    message.ChatId,
-                    "Схоже ви надіслали все необідне для страхового полісу. Не бажаєте його купити ?",
-                    ct);
+                await botClient.SendMessageAsync(
+                     message.ChatId,
+                     "Схоже ви надіслали все необідне для страхового полісу. Не бажаєте його купити ?",
+                     ct);
             }
         }
     }

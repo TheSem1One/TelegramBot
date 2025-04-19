@@ -1,4 +1,4 @@
-﻿namespace TelegramBot.Infrastructure.Data
+﻿namespace CarInsurance.Data
 {
     public class MongoDbSettings
     {

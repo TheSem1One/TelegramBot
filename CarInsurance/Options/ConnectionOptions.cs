@@ -1,4 +1,4 @@
-﻿namespace TelegramBot.Domain.Options
+﻿namespace CarInsurance.Options
 {
     public class ConnectionOptions
     {
@@ -10,3 +10,4 @@
         public string TelegramAPI { get; set; } = null!;
     }
 }
+

@@ -1,6 +1,6 @@
-﻿using TelegramBot.Domain.Entity.Dto;
+﻿using CarInsurance.Entities.Dto;
 
-namespace TelegramBot.Domain.Repositories
+namespace CarInsurance.Repositories
 {
     public interface IInsuranceBotService
     {

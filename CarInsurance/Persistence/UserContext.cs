@@ -1,12 +1,11 @@
-﻿using MongoDB.Driver;
-using Microsoft.Extensions.Configuration;
+﻿using CarInsurance.Entities;
+using CarInsurance.Options;
 using Microsoft.Extensions.Options;
-using TelegramBot.Domain.Entity;
-using TelegramBot.Domain.Options;
+using MongoDB.Driver;
 
-namespace TelegramBot.Infrastructure.Persistence
+namespace CarInsurance.Persistence
 {
-    public class UserContext :DbContext
+    public class UserContext : DbContext
     {
         public IMongoCollection<User> Users { get; set; }
 
@@ -15,7 +14,6 @@ namespace TelegramBot.Infrastructure.Persistence
             var client = new MongoClient(options.Value.DbConnection);
             var database = client.GetDatabase(options.Value.DbName);
             Users = database.GetCollection<User>(options.Value.DbCollection);
-
         }
     }
 }

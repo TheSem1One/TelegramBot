@@ -1,5 +1,5 @@
 ﻿using Mindee.Input;
-namespace TelegramBot.Domain.Entity.Dto
+namespace CarInsurance.Entities.Dto
 {
     public class UserMessageDto
     {

@@ -1,19 +1,20 @@
-﻿using Microsoft.Extensions.Options;
+using CarInsurance.Data;
+using CarInsurance.Helper;
+using CarInsurance.Options;
+using CarInsurance.Persistence;
+using CarInsurance.Repositories;
+using CarInsurance.Services;
+using Microsoft.Extensions.Options;
 using QuestPDF.Infrastructure;
 using Telegram.Bot;
-using TelegramBot.Domain.Options;
-using TelegramBot.Domain.Repositories;
-using TelegramBot.Infrastructure.Data;
-using TelegramBot.Infrastructure.Helper;
-using TelegramBot.Infrastructure.Persistence;
-using TelegramBot.Infrastructure.Services;
+
 
 class Program
 {
     static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        // додаємо appsettings.{Environment}.json
+        // ??????? appsettings.{Environment}.json
         builder.Configuration
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)

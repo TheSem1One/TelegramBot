@@ -1,8 +1,8 @@
-﻿using Mindee.Parsing.Common;
+﻿using CarInsurance.Entities;
+using Mindee.Parsing.Common;
 using Mindee.Product.Generated;
-using TelegramBot.Domain.Entity;
 
-namespace TelegramBot.Infrastructure.Helper
+namespace CarInsurance.Helper
 {
     public class MapToTechPassport
     {

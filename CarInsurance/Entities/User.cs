@@ -1,6 +1,7 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-namespace TelegramBot.Domain.Entity
+﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
+
+namespace CarInsurance.Entities
 {
     public class User
     {

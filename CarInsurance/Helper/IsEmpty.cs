@@ -1,6 +1,6 @@
-﻿using TelegramBot.Domain.Entity;
+﻿using CarInsurance.Entities;
 
-namespace TelegramBot.Infrastructure.Helper
+namespace CarInsurance.Helper
 {
     public class IsEmpty
     {

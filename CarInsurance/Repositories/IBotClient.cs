@@ -1,8 +1,8 @@
-﻿using Telegram.Bot;
-using TelegramBot.Domain.Entity.Dto;
-using User = TelegramBot.Domain.Entity.User;
+﻿using CarInsurance.Entities;
+using CarInsurance.Entities.Dto;
+using Telegram.Bot;
 
-namespace TelegramBot.Domain.Repositories
+namespace CarInsurance.Repositories
 {
     public interface IBotClient
     {

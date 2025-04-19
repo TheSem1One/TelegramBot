@@ -1,7 +1,7 @@
-﻿using QuestPDF.Fluent;
+﻿using CarInsurance.Entities;
+using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
-using TelegramBot.Domain.Entity;
 
 public class InsuranceDocument : IDocument
 {
