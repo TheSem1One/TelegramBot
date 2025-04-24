@@ -3,9 +3,12 @@ using CarInsurance.Options;
 using CarInsurance.Persistence;
 using CarInsurance.Repositories;
 using CarInsurance.Services;
+using Codeblaze.SemanticKernel.Connectors.Ollama;
 using Microsoft.Extensions.Options;
+using Microsoft.SemanticKernel;
 using QuestPDF.Infrastructure;
 using Telegram.Bot;
+using OpenAI;
 class Program
 {
     static async Task Main(string[] args)
@@ -16,16 +19,15 @@ class Program
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
             .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
             .AddEnvironmentVariables();
-
         builder.Services.Configure<ConnectionOptions>(
             builder.Configuration.GetSection(ConnectionOptions.SectionName));
-
         builder.Services.Configure<ConnectionOptions>(builder.Configuration.GetSection(nameof(ConnectionOptions)));
         builder.Services.AddSingleton<IDbContext, UserContext>();
         builder.Services.AddSingleton<IImageProcessingRepository, MindeeService>();
         builder.Services.AddSingleton<IInsuranceBotService, InsuranceBotService>();
         builder.Services.AddHostedService<TelegramBotClientAdapter>();
         builder.Services.AddSingleton<MapToTechPassport>();
+        builder.Services.AddSingleton<AiChating>();
         builder.Services.AddSingleton<MissingDocumentsInspector>();
         builder.Services.AddSingleton<ITelegramBotClient>(provider =>
         {

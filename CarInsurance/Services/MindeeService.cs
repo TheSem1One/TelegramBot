@@ -42,12 +42,7 @@ namespace CarInsurance.Services
 
                 await _context.Users.UpdateOneAsync(userFilter, update);
 
-                return $"""
-                        Ім'я: {prediction.GivenNames.FirstOrDefault()?.Value ?? "Не визначено"}
-                        Прізвище: {prediction.Surnames.FirstOrDefault()}
-                        Дата народження: {prediction.BirthDate.Value ?? "Не визначено"}
-                        Номер документа: {prediction.DocumentNumber.Value ?? "Не визначено"}
-                        """;
+                return "Дякую операція успішно виконана";
             }
 
             return "Не вдалось зі сканувати фото, будь ласка спробуйте ще раз";

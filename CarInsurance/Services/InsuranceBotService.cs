@@ -9,8 +9,10 @@ using static MongoDB.Driver.Builders<CarInsurance.Entities.User>;
 namespace CarInsurance.Services
 {
     public class InsuranceBotService(IImageProcessingRepository imageProcessingService,
-       IDbContext context, MissingDocumentsInspector empty, ITelegramBotClient client) : IInsuranceBotService
+       IDbContext context, MissingDocumentsInspector empty,
+       ITelegramBotClient client,AiChating aiChating) : IInsuranceBotService
     {
+        private readonly AiChating _aiChating = aiChating;
         private readonly MissingDocumentsInspector _empty = empty;
         private readonly IImageProcessingRepository _imageProcessingService = imageProcessingService;
         private readonly IDbContext _context = context;
@@ -121,25 +123,28 @@ namespace CarInsurance.Services
                 .Users
                 .Find(user => user.Id == message.UserId)
                 .FirstOrDefaultAsync();
+            var messages = await _aiChating.Messages(message.Text);
             if (_empty.IsPassportEmpty(user.Passport))
             {
                 await botClient.SendMessageAsync(
                     message.ChatId,
-                    "Будь ласка, надішліть Технічний паспорт для обробки.",
+                    messages+
+                    "\nНезабувайте ,що для страхового полісу потрібно ще додати технічний паспорт.",
                     ct);
             }
             else if (_empty.IsTechPassportEmpty(user.TechnicalPassports))
             {
                 await botClient.SendMessageAsync(
                     message.ChatId,
-                    "Будь ласка, надішліть фото паспорт для обробки.",
+                    messages+"" +
+                    "\nНезабувайте ,що для страхового полісу вам необхідно звичайний та технічний паспорт.",
                     ct);
             }
             else
             {
                 await botClient.SendMessageAsync(
                      message.ChatId,
-                     "Схоже ви надіслали все необідне для страхового полісу. Не бажаєте його купити ?",
+                     messages,
                      ct);
             }
         }
