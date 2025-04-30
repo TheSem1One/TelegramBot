@@ -23,9 +23,13 @@ namespace CarInsurance.Services
                 .Users
                 .Find(user => user.Id == message.UserId)
                 .FirstOrDefaultAsync();
-            if (message.Photos?.Any() == true)
+            if (message.Photos?.Any() == true )
             {
-                if (_empty.IsPassportEmpty(user.Passport))
+                if (!_empty.IsPassportEmpty(user.Passport) && !_empty.IsTechPassportEmpty(user.TechnicalPassports))
+                {
+                   await MessagesForPhoto(message, botClient, ct);
+                }
+                else if (_empty.IsPassportEmpty(user.Passport))
                 {
                     await ProcessPhotoPassportAsync(message, botClient, ct);
 
@@ -118,31 +122,39 @@ namespace CarInsurance.Services
 
         }
 
+        private async Task MessagesForPhoto(UserMessageDto message, IBotClient botClient, CancellationToken ct)
+        {
+            var messages = await _aiChating.MessagesForPhoto(message.Text, message.ChatId);
+            await botClient.SendMessageAsync(
+                message.ChatId,
+                messages,
+                ct);
+        }
         private async Task RequestDocument(UserMessageDto message, IBotClient botClient, CancellationToken ct)
         {
             var user = await _context
                 .Users
                 .Find(user => user.Id == message.UserId)
                 .FirstOrDefaultAsync();
-            var messages = await _aiChating.Messages(message.Text,message.ChatId);
-            if (_empty.IsPassportEmpty(user.Passport))
+            if (!_empty.IsPassportEmpty(user.Passport) && !_empty.IsTechPassportEmpty(user.TechnicalPassports))
             {
+                var messages = await _aiChating.Messages(message.Text, message.ChatId,3);
                 await botClient.SendMessageAsync(
                     message.ChatId,
-                    messages +
-                    "\nНезабувайте ,що для страхового полісу потрібно ще додати технічний паспорт.",
+                    messages,
                     ct);
             }
-            else if (_empty.IsTechPassportEmpty(user.TechnicalPassports))
+            else if (!_empty.IsTechPassportEmpty(user.TechnicalPassports))
             {
+                var messages = await _aiChating.Messages(message.Text, message.ChatId, 2);
                 await botClient.SendMessageAsync(
                     message.ChatId,
-                    messages + "" +
-                    "\nНезабувайте ,що для страхового полісу вам необхідно звичайний та технічний паспорт.",
+                    messages ,
                     ct);
             }
             else
             {
+                var messages = await _aiChating.Messages(message.Text, message.ChatId, 1);
                 await botClient.SendMessageAsync(
                      message.ChatId,
                      messages,

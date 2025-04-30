@@ -47,8 +47,7 @@ namespace CarInsurance.Services
                        $"👤 Прізвище: {passport.Surname}\n" +
                        $"🆔 Номер документа: {passport.DocumentNumber}\n" +
                        $"📅 Дата народження: {passport.DateOfBirth:dd.MM.yyyy}\n" +
-                       $"🚻 Стать: {passport.Sex}\n+" +
-                       $"Чи бажаєте ви зберегти ці дані?";
+                       $"🚻 Стать: {passport.Sex}\n+";
             }
 
             return "Не вдалось зі сканувати фото, будь ласка спробуйте ще раз";
@@ -61,8 +60,8 @@ namespace CarInsurance.Services
             var userFilter = Builders<User>.Filter.Eq(u => u.Id, userId);
 
             var endpoint = new CustomEndpoint(
-                endpointName: "test",
-                accountName: "TheSem1One",
+                endpointName: "techpassport",
+                accountName: "JustSem1One",
                 version: "1"
             );
             var response = await _mindeeClient.EnqueueAndParseAsync<GeneratedV1>(image, endpoint);
@@ -74,7 +73,15 @@ namespace CarInsurance.Services
                 var update = Builders<User>.Update
                     .Set(u => u.TechnicalPassports, passport);
                 await _context.Users.UpdateOneAsync(userFilter, update);
-                return "Дякую операція успішно виконана";
+                return $"✅ Успішно зчитано!\n" +
+                       $"🚗 Марка: {passport.Mark}\n" +
+                       $"🚘 Тип: {passport.Type}\n" +
+                       $"📄 Комерційний опис: {passport.CommercialDescription}\n" +
+                       $"🔢 VIN: {passport.VehicleIdentificationNumber}\n" +
+                       $"⚖️ Максимальна маса: {passport.MaximumMass}\n" +
+                       $"🛢️ Обʼєм двигуна: {passport.Capacity}\n" +
+                       $"🎨 Колір: {passport.Color}";
+
             }
 
             return "Не вдалось зі сканувати фото, будь ласка спробуйте ще раз";
