@@ -3,12 +3,10 @@ using CarInsurance.Options;
 using CarInsurance.Persistence;
 using CarInsurance.Repositories;
 using CarInsurance.Services;
-using Codeblaze.SemanticKernel.Connectors.Ollama;
 using Microsoft.Extensions.Options;
-using Microsoft.SemanticKernel;
 using QuestPDF.Infrastructure;
 using Telegram.Bot;
-using OpenAI;
+
 class Program
 {
     static async Task Main(string[] args)
@@ -29,10 +27,16 @@ class Program
         builder.Services.AddSingleton<MapToTechPassport>();
         builder.Services.AddSingleton<AiChating>();
         builder.Services.AddSingleton<MissingDocumentsInspector>();
+        builder.Services.AddSingleton<IUserSessionService, RedisSessionService>();
         builder.Services.AddSingleton<ITelegramBotClient>(provider =>
         {
             var options = provider.GetRequiredService<IOptions<ConnectionOptions>>().Value;
             return new TelegramBotClient(options.TelegramAPI);
+        });
+        builder.Services.AddStackExchangeRedisCache(options =>
+        {
+            var connection = builder.Configuration.GetConnectionString("RedisConnection");
+            options.Configuration = connection;
         });
         QuestPDF.Settings.License = LicenseType.Community;
 

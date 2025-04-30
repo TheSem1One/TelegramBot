@@ -42,7 +42,13 @@ namespace CarInsurance.Services
 
                 await _context.Users.UpdateOneAsync(userFilter, update);
 
-                return "Дякую операція успішно виконана";
+                return $"✅ Успішно зчитано!\n" +
+                       $"👤 Ім’я: {passport.Name}\n" +
+                       $"👤 Прізвище: {passport.Surname}\n" +
+                       $"🆔 Номер документа: {passport.DocumentNumber}\n" +
+                       $"📅 Дата народження: {passport.DateOfBirth:dd.MM.yyyy}\n" +
+                       $"🚻 Стать: {passport.Sex}\n+" +
+                       $"Чи бажаєте ви зберегти ці дані?";
             }
 
             return "Не вдалось зі сканувати фото, будь ласка спробуйте ще раз";
@@ -65,7 +71,6 @@ namespace CarInsurance.Services
             if (prediction is not null)
             {
                 var passport = _map.ToConvertTechPassportDto(prediction);
-                // Маппінг з урахуванням можливих ключів
                 var update = Builders<User>.Update
                     .Set(u => u.TechnicalPassports, passport);
                 await _context.Users.UpdateOneAsync(userFilter, update);

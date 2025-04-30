@@ -10,7 +10,7 @@ namespace CarInsurance.Services
 {
     public class InsuranceBotService(IImageProcessingRepository imageProcessingService,
        IDbContext context, MissingDocumentsInspector empty,
-       ITelegramBotClient client,AiChating aiChating) : IInsuranceBotService
+       ITelegramBotClient client, AiChating aiChating) : IInsuranceBotService
     {
         private readonly AiChating _aiChating = aiChating;
         private readonly MissingDocumentsInspector _empty = empty;
@@ -93,6 +93,7 @@ namespace CarInsurance.Services
             {
                 var result = await _imageProcessingService.ProcessTechPassportAsync(photo, ct, message.UserId);
                 await botClient.SendMessageAsync(message.ChatId, $"Результати обробки:\n{result}", ct);
+                
             }
         }
         protected async Task SendWelcomeMessage(UserMessageDto message, IBotClient botClient, CancellationToken ct)
@@ -123,12 +124,12 @@ namespace CarInsurance.Services
                 .Users
                 .Find(user => user.Id == message.UserId)
                 .FirstOrDefaultAsync();
-            var messages = await _aiChating.Messages(message.Text);
+            var messages = await _aiChating.Messages(message.Text,message.ChatId);
             if (_empty.IsPassportEmpty(user.Passport))
             {
                 await botClient.SendMessageAsync(
                     message.ChatId,
-                    messages+
+                    messages +
                     "\nНезабувайте ,що для страхового полісу потрібно ще додати технічний паспорт.",
                     ct);
             }
@@ -136,7 +137,7 @@ namespace CarInsurance.Services
             {
                 await botClient.SendMessageAsync(
                     message.ChatId,
-                    messages+"" +
+                    messages + "" +
                     "\nНезабувайте ,що для страхового полісу вам необхідно звичайний та технічний паспорт.",
                     ct);
             }

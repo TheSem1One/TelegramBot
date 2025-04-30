@@ -9,6 +9,7 @@
         public string MindeeAPI { get; set; } = null!;
         public string TelegramAPI { get; set; } = null!;
         public string OpenAIAPI { get; set; } = null!;
+        public string RedisConnection { get; set; } = null!;
     }
 }
 
